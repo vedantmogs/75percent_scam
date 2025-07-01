@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>F.Y.C.S C Division - Bunk Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+    label, input {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ff6b81;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ff4757;
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .subject {
+      margin-bottom: 25px;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.9em;
+      color: var(--footer-color);
+    }
+    .theme-toggle {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .theme-toggle button {
+      background: #1e90ff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 F.Y.C.S C Division – Bunk Calculator</h1>
+  <div class="theme-toggle">
+    <button onclick="toggleTheme()">🌗 Toggle Dark/Light Mode</button>
+  </div>
+  <div class="container">
+    <div id="form"></div>
+    <button onclick="calculate()">Calculate Attendance</button>
+    <div class="result" id="result"></div>
+    <div class="footer">
+      Made with ❤️ by Vedant Jorkar for F.Y.C.S C Division (Pillai College)
+    </div>
+  </div>  <script>
+    const root = document.documentElement;
+
+    function setDarkMode() {
+      root.style.setProperty('--bg-color', '#2f3542');
+      root.style.setProperty('--text-color', 'white');
+      root.style.setProperty('--card-bg', '#1e272e');
+      root.style.setProperty('--footer-color', '#ced6e0');
+    }
+
+    function setLightMode() {
+      root.style.setProperty('--bg-color', '#f1f2f6');
+      root.style.setProperty('--text-color', '#2f3542');
+      root.style.setProperty('--card-bg', '#ffffff');
+      root.style.setProperty('--footer-color', '#57606f');
+    }
+
+    let darkMode = true;
+    setDarkMode();
+
+    function toggleTheme() {
+      darkMode = !darkMode;
+      if (darkMode) setDarkMode();
+      else setLightMode();
+    }
+
+    const subjects = [
+      "Indian Knowledge System (IKS)",
+      "Python (KS)",
+      "Maths (SP)",
+      "Communication (JE)",
+      "SQL (SS)",
+      "Design Learning (X)"
+    ];
+
+    const formDiv = document.getElementById("form");
+    subjects.forEach((subject, index) => {
+      formDiv.innerHTML += `
+        <div class="subject">
+          <label><strong>${subject}</strong></label>
+          <input type="number" id="total${index}" placeholder="Total lectures till now" min="0" />
+          <input type="number" id="attended${index}" placeholder="Your attended lectures" min="0" />
+        </div>
+      `;
+    });
+
+    function calculate() {
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      subjects.forEach((subject, index) => {
+        const total = parseInt(document.getElementById(`total${index}`).value);
+        const attended = parseInt(document.getElementById(`attended${index}`).value);
+
+        if (!isNaN(total) && !isNaN(attended) && total > 0) {
+          const percentage = ((attended / total) * 100).toFixed(2);
+          const maxBunks = Math.floor(total - total * 0.75);
+          const bunksLeft = Math.max(maxBunks - (total - attended), 0);
+
+          resultDiv.innerHTML += `
+            <div>
+              <strong>${subject}:</strong><br>
+              📈 Attendance: ${percentage}%<br>
+              😎 You can bunk <strong>${bunksLeft}</strong> more lecture(s) safely.<br><br>
+            </div>
+          `;
+        } else {
+          resultDiv.innerHTML += `<div><strong>${subject}:</strong> ⚠️ Please enter valid numbers.<br><br></div>`;
+        }
+      });
+    }
+  </script></body>
+</html>
